@@ -3,17 +3,21 @@
 Introduction
 ------------
 
-This plugin sanitizes any messy messed up searches into usable form (i.e. it tries to disable word swallowing, word corruption, phrase corruption, localization, limitation). This is achieved by putting everything into quotes, searching for it, and then removing the quotes from the visible input window again. Additionally, it does some custom CSS and other things to e.g. hide info windows, un-crush text blocks, un-limit and un-localize results and remove redundant information as far as that is possible.
+This plugin sanitizes any messy messed up searches into usable form (i.e. it tries to disable word swallowing, word corruption, phrase corruption, localization, limitation). This is achieved by putting everything into quotes, searching for it, and then removing the quotes from the visible input box again. Additionally, it does some custom CSS and other things to e.g. hide info windows, un-crush text blocks, un-limit and un-localize results and remove redundant information as far as that is possible.
 
+This is version 0.1 and lots of things should be improved: But it works well enough for me!
 
 Building
 --------
 
 cd opera_gsearch_sanitizer
-zip ../opera_gsearch_sanitizer.oex ./* -r 
-*-
-Then open the file with opera.
 
+zip ../opera_gsearch_sanitizer.oex ./* -r 
+   
+*-
+   
+Then open the file with opera.
+   
 You can also drag-and-drop the config.xml into your opera window to open it in "developer mode".
 
 
