@@ -15,9 +15,9 @@ window.addEventListener('DOMContentLoaded', function() {
 		var resumefunction = false;
 		var re;
 		for (var i = 0; i < applydomains.length; i++)
-			{ re = new RegExp(applydomains, "gi"); if(document.URL.match(re)) { resumefunction = true; } ;}
+			{ re = new RegExp(applydomains, "gi"); if(document.URL.match(re)) { resumefunction = true; } }
 		for (var i = 0; i < noapplydomains.length; i++)
-			{ re = new RegExp(noapplydomains, "gi"); if(document.URL.match(re)) { resumefunction = false; } ;}
+			{ re = new RegExp(noapplydomains, "gi"); if(document.URL.match(re)) { resumefunction = false; } }
 		if(!resumefunction) { return(true); }
 
 		var arr = document.URL.match(/[\?&]q=[^&]*/) || ["000"];
@@ -60,9 +60,9 @@ window.addEventListener('DOMContentLoaded', function() {
 			var res = document.getElementById('ires').getElementsByClassName("g");
 			for (var i = 0; i < res.length; i++)
 			{
-				for (var j = 0; j < terms.length; j++)
+				for (var j = 0; j < newterms.length; j++)
 				{
-					re = new RegExp(terms[j], "gi");
+					re = new RegExp(newterms[j], "gi");
 					if(!(res[i].innerHTML.match(re))) 
 					{ 
 						res[i].innerHTML = " "; 
