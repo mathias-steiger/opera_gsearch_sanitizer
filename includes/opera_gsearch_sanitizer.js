@@ -38,9 +38,11 @@ window.addEventListener('DOMContentLoaded', function() {
 		}
 		else if(alreadyparsed[0].length != 0)
 		{
+			// set input box without single words quoted
 			var terms = input_dequote(document.forms['gbqf'].q.value);
 			document.forms['gbqf'].q.value = terms.join(" ");
 
+			// remove all quotes and all special search keys because we don't really want to know what they all do
 			var newterms = [ ];
 			for (var i = 0; i < terms.length; i++)
 			{
@@ -51,12 +53,13 @@ window.addEventListener('DOMContentLoaded', function() {
 					if(terms[i].match(re) == null) { newterms.push(terms[i]); break; }
 				}
 			}
+			// remove results that do not contain all of the search terms (might just not show up on the search engine itself though, but rarely that is so)
 			var res = document.getElementById('ires').getElementsByClassName("g");
 			for (var i = 0; i < res.length; i++)
 			{
 				for (var j = 0; j < terms.length; j++)
 				{
-					re = new RegExp(">[^<]*"+terms[j]+"<[^>]*", "gi");
+					re = new RegExp(terms[j], "gi");
 					if(!(res[i].innerHTML.match(re))) { res[i].innerHTML = ""; break; }
 				}
 			}
