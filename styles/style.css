@@ -1,0 +1,16 @@
+#cnt .mw #rcnt #center_col {
+margin: 10px !important;
+width: auto !important;
+max-width: none !important;
+}
+
+#cnt .mw #rcnt #center_col .med #ires div.s {
+margin: 0px !important;
+width: auto !important;
+max-width: none !important;
+
+}
+
+#rcnt #rhs #rhs_block {
+display: none !important;
+}

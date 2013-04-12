@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets">
+	<name>Search Engine Sanitizer For Opera</name>
+	<description>Puts all queries in quotes (silently), tries to show as much results as possible and some more features.</description>
+	<author href="http://master.ms/operaextension">Mathias Steiger (@masterdotms)</author>
+	<access origin="*"/>
+</widget>
