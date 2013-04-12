@@ -2,6 +2,7 @@
 // ==UserScript==
 // @include htt*://*
 
+var globspecial = [ "location:", "source:", "-", "allinanchor:", "allintext:", "allintitle:", "allinurl:", "cache:", "define:", "filetype:", "id:", "inanchor:", "info:", "intext:", "intitle:", "inurl:", "link:", "related:", "site:" ];
 // 'DOMContentLoaded'
 window.addEventListener('DOMContentLoaded', function() {
 //opera.addEventListener('BeforeScript', function(userJSEvent) {
@@ -11,9 +12,9 @@ window.addEventListener('DOMContentLoaded', function() {
 		var resumefunction = false;
 		var re;
 		for (var i = 0; i < applydomains.length; i++)
-			{ re = new RegExp(applydomains, "g"); if(document.URL.match(re)) { resumefunction = true; } ;}
+			{ re = new RegExp(applydomains, "gi"); if(document.URL.match(re)) { resumefunction = true; } ;}
 		for (var i = 0; i < noapplydomains.length; i++)
-			{ re = new RegExp(noapplydomains, "g"); if(document.URL.match(re)) { resumefunction = false; } ;}
+			{ re = new RegExp(noapplydomains, "gi"); if(document.URL.match(re)) { resumefunction = false; } ;}
 		if(!resumefunction) { return(true); }
 
 		var arr = document.URL.match(/[\?&]q=[^&]*/) || ["000"];
@@ -37,7 +38,29 @@ window.addEventListener('DOMContentLoaded', function() {
 		}
 		else if(alreadyparsed[0].length != 0)
 		{
-			document.forms['gbqf'].q.value = input_dequote(document.forms['gbqf'].q.value);
+			var terms = input_dequote(document.forms['gbqf'].q.value);
+			document.forms['gbqf'].q.value = terms.join(" ");
+
+			var newterms = [ ];
+			for (var i = 0; i < terms.length; i++)
+			{
+				terms[i] = terms[i].replace(/"/g, "");
+				for (var j = 0; j < globspecial.length; j++)
+				{
+					re = new RegExp("^"+globspecial[j], "gi");	
+					if(terms[i].match(re) == null) { newterms.push(terms[i]); break; }
+				}
+			}
+			var res = document.getElementById('ires').getElementsByClassName("g");
+			for (var i = 0; i < res.length; i++)
+			{
+				for (var j = 0; j < terms.length; j++)
+				{
+					re = new RegExp(">[^<]*"+terms[j]+"<[^>]*", "gi");
+					if(!(res[i].innerHTML.match(re))) { res[i].innerHTML = ""; break; }
+				}
+			}
+				
 		}
 }, false);
 
@@ -49,7 +72,7 @@ function setCookie(c_name, value, exdays, domain)
 	document.cookie=c_name + "=" + c_value + "; domain="+domain;
 	document.cookie=c_name + "=" + c_value;
 }
-// basically ignore quoted phrases and just strip " from single words
+// basically ignore quoted phrases and just strip " from single words - returns terms as array
 function input_dequote(s)
 {
 	var a0 = s.split(" ");	
@@ -68,7 +91,7 @@ function input_dequote(s)
 
 		if(opennew) { a1.push(atemp); }
 	}
-	return(a1.join(" "));
+	return(a1);
 }
 
 // example input: s = '%22this+text%22+is+quoted+intitle%3A%22par-+tially%22' ("this text" is quoted intitle:"par- tially")
@@ -134,13 +157,15 @@ function strip_quotes(s)
 // example input: s = '%22intitle%3Aquoted%22' ('"intitle:quoted"')
 function gf_quote(s)
 {
+	var special = globspecial.slice(0);
+	for (var i = 0; i < special.length; i++)
+		{ special[i] = special[i].replace(/:/g, "%3A"); }
 
-	var special = [ "location:", "source:", "-", "allinanchor%3A", "allintext%3A", "allintitle%3A", "allinurl%3A", "cache%3A", "define%3A", "filetype%3A", "id%3A", "inanchor%3A", "info%3A", "intext%3A", "intitle%3A", "inurl%3A", "link%3A", "related%3A", "site%3A" ];
 	var re;
 	var temp;
 	for (var i = 0; i < special.length; i++) 
 	{
-		re = new RegExp("^%22"+special[i], "g");
+		re = new RegExp("^%22"+special[i], "gi");
 		if((s.match(re) || "").length > 0)
 		{
 			s = special[i]+"%22"+strip_quotes(s.replace(re, ''))+"%22";
@@ -149,5 +174,5 @@ function gf_quote(s)
 	// example output: 'intitle%3A%22quoted%22' ~(intitle:"quoted")
 	return(s);
 }
-
 // ==/UserScript==
+
