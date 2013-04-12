@@ -4,11 +4,14 @@
 
 var globspecial = [ "location:", "source:", "-", "allinanchor:", "allintext:", "allintitle:", "allinurl:", "cache:", "define:", "filetype:", "id:", "inanchor:", "info:", "intext:", "intitle:", "inurl:", "link:", "related:", "site:" ];
 // 'DOMContentLoaded'
+//
+//window.addEventListener(BeforeEvent, function() { alert("Before!"); }, false);
+
 window.addEventListener('DOMContentLoaded', function() {
 //opera.addEventListener('BeforeScript', function(userJSEvent) {
 //  userJSEvent.element.text = userJSEvent.element.text.replace(/function\s+window\.onload\(/g, 'window.onload = function(');
 		var applydomains = ["\.google\."];
-		var noapplydomains = ["webcache\.google\."];
+		var noapplydomains = ["webcache\.google\.", "maps\.google\."];
 		var resumefunction = false;
 		var re;
 		for (var i = 0; i < applydomains.length; i++)
@@ -34,15 +37,15 @@ window.addEventListener('DOMContentLoaded', function() {
 			var important = "";
 			if((document.URL.match(/[\?&]tbm=[^&]*/) || [""]).length != 0) { important += "&"+(document.URL.match(/[\?&]tbm=[^&]*/) || [""])[0].substr(1); }
 
-			this.document.location.href = "http://www.google.com/search?q="+sub1+"&hl=en&num=31337&safe=off"+important;
+			this.document.location.href = "http://www.google.com/search?q="+sub1+"&hl=en&num=31337&safe=off&tbs=li:1"+important;
 		}
 		else if(alreadyparsed[0].length != 0)
 		{
 			// set input box without single words quoted
 			var terms = input_dequote(document.forms['gbqf'].q.value);
 			document.forms['gbqf'].q.value = terms.join(" ");
-
 			// remove all quotes and all special search keys because we don't really want to know what they all do
+			var rmcount = 0;
 			var newterms = [ ];
 			for (var i = 0; i < terms.length; i++)
 			{
@@ -60,10 +63,23 @@ window.addEventListener('DOMContentLoaded', function() {
 				for (var j = 0; j < terms.length; j++)
 				{
 					re = new RegExp(terms[j], "gi");
-					if(!(res[i].innerHTML.match(re))) { res[i].innerHTML = ""; break; }
+					if(!(res[i].innerHTML.match(re))) 
+					{ 
+						res[i].innerHTML = " "; 
+						(document.getElementById('ires').getElementsByClassName("g"))[i] = " ";
+						rmcount += 1; 
+						break; 
+					}
 				}
 			}
+
+			// append at the bottom if stuff was removed
+			if(rmcount > 0)
+			{
+				if(document.body != null) { document.body.innerHTML += "<h3>Sanitizer: removed "+rmcount+" invalid search results"; }
+			}
 				
+			throw new Error('SUCCESS!');
 		}
 }, false);
 

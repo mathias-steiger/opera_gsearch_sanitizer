@@ -7,6 +7,7 @@ This plugin sanitizes any messy messed up searches into usable form (i.e. it tri
 
 This is version 0.1 and lots of things should be improved: But it works well enough for me!
 
+
 Building
 --------
 
@@ -19,6 +20,13 @@ zip ../opera_gsearch_sanitizer.oex ./* -r
 Then open the file with opera.
    
 You can also drag-and-drop the config.xml into your opera window to open it in "developer mode".
+
+
+TODO
+----
+
+- jabbascript sucks: innerHTML sometimes has no effect
+- opera extension API sucks: no known method to load jabbascript before DOMContentLoaded
 
 
 LEGAL DISCLAIMER
